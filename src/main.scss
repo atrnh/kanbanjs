@@ -1,4 +1,48 @@
-html {
-  color: red;
-  font: Helvetica;
+body, html, #app, #app > div {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#app > div {
+  display: flex;
+  width: 200%;
+}
+
+.board {
+  display: inline-block;
+  width: 15em;
+  border: 1px solid black;
+
+  div {
+    padding: 0.3em;
+  }
+
+  + .board {
+    margin-left: 5px;
+  }
+
+  h1 {
+    font-size: 1.5em;
+    margin: 0;
+    padding: 0;
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .job {
+    margin: 5px;
+    border: 1px solid black;
+
+    h2 {
+      font-size: 1.2em;
+      font-weight: normal;
+      margin: 0;
+      padding: 0;
+    }
+  }
 }
