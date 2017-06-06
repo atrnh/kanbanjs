@@ -61,31 +61,44 @@ const BoardJobs = sequelize.define('boardJobs', {}, {
 });
 
 // Associations
-Priority.hasMany(Task, {foreignKey: 'priority_code', sourceKey: 'code'});
-Task.belongsTo(Priority, {foreignKey: 'priority_code', targetKey: 'code'});
+Priority.hasMany(Task, {as: 'Tasks', foreignKey: 'priority_code', sourceKey: 'code'});
+Task.belongsTo(Priority, {as: 'Priority', foreignKey: 'priority_code', targetKey: 'code'});
 Board.belongsToMany(Job, {through: BoardJobs});
 Job.belongsToMany(Board, {through: BoardJobs});
 
 sequelize.sync({force: true}).then(() => {
-  Priority.bulkCreate([
+  const priorities = Priority.bulkCreate([
     { code: 'none', title: 'None' },
     { code: 'min', title: 'Minor' },
     { code: 'med', title: 'Medium' },
     { code: 'urg', title: 'Urgent' }
   ]);
 
-  Board.bulkCreate([
+  const boards = Board.bulkCreate([
     { title: 'To Do', desc: 'Things to do' },
     { title: 'Doing', desc: "Things I'm working on" },
     { title: 'Done', desc: 'Completed tasks' }
   ]);
 
-  Job.create({
+  const job = Job.create({
     title: 'Be cool',
     desc: 'Gotta learn how to be a cool person'
   });
 
-  Task.create({
-    title: 'Get sunglasses'
-  });
+  const task = Task
+    .create({
+      title: 'Get sunglasses'
+    })
+    .then((task) => {
+      task.setPriority('min').then((task) => {
+        // Let's see if we can get priority-min's task
+        priorities.then((priorities) => {
+          priorities[1].getTasks().then((tasks) => { // The min priority
+            tasks.map(task => {
+              console.log(task.get({plain: true}));
+            });
+          });
+        });
+      });
+    });
 });
