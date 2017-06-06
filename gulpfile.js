@@ -53,7 +53,8 @@ gulp.task('html', () => {
 gulp.task('sass', () => {
   return gulp.src(config.paths.mainSass)
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest(`${config.paths.dist}/css`));
+    .pipe(gulp.dest(`${config.paths.dist}/css`))
+    .pipe(connect.reload());
 });
 
 gulp.task('watch', () => {
